@@ -33,14 +33,25 @@ export default function Home() {
     "initial" | "creating" | "created" | "updating" | "updated"
   >("initial");
   let [prompt, setPrompt] = useState("");
-  let [provider, setProvider] = useState(
-    localStorage.getItem("selectedProvider") ?? DEFAULT_LLM.provider,
-  );
+  let [provider, setProvider] = useState(DEFAULT_LLM.provider);
   console.log('pprovider', provider);
-  let [model, setModel] = useState(
-    localStorage.getItem("selectedModel") ?? DEFAULT_LLM.name,
-  );
+  let [model, setModel] = useState(DEFAULT_LLM.name);
   console.log('mmodel', model);
+
+  // Set initial values from localStorage after component mounts
+  useEffect(() => {
+    // Only access localStorage on the client side
+    const savedProvider = localStorage.getItem("selectedProvider");
+    const savedModel = localStorage.getItem("selectedModel");
+    
+    if (savedProvider) {
+      setProvider(savedProvider);
+    }
+    
+    if (savedModel) {
+      setModel(savedModel);
+    }
+  }, []);
   let [selectedModel, setSelectedModel] = useState<ModelInfo | null>(null);
   let [apiKeys, setApiKeys] = useState({
     OpenAI: "",
